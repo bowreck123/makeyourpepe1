@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- SEO Meta Tags -->
+  <title>Make Your Pepe - Create Custom Pepe Memes with $MYP Token</title>
+  <meta name="description" content="Create custom Pepe memes with Make Your Pepe! Unlock rare items by holding $MYP tokens. Build your perfect Pepe with exclusive faces, hats, and accessories on Solana.">
+  <meta name="keywords" content="pepe, meme maker, crypto, solana, MYP token, meme generator, pepe creator, make your pepe">
+  
+  <!-- Open Graph for Social Sharing -->
+  <meta property="og:title" content="Make Your Pepe - Custom Pepe Meme Creator">
+  <meta property="og:description" content="Create custom Pepe memes and unlock rare items with $MYP tokens!">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://makeyourpepe.com">
+  <meta property="og:site_name" content="Make Your Pepe">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Make Your Pepe - Custom Pepe Meme Creator">
+  <meta name="twitter:description" content="Create custom Pepe memes and unlock rare items with $MYP tokens!">
+  <meta name="twitter:site" content="@makeyourpepe">
+  
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background: linear-gradient(135deg, #0a1128 0%, #001f54 50%, #034078 100%); color: #fff; min-height: 100vh; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    header { text-align: center; margin-bottom: 30px; padding: 30px; background: linear-gradient(135deg, #1282a2 0%, #0a1128 100%); border: 2px solid #00ff88; box-shadow: 0 0 30px rgba(0,255,136,0.3), 0 8px 32px rgba(0,0,0,0.5); }
+    h1 { color: #00ff88; margin-bottom: 10px; font-size: 2.5em; text-shadow: 0 0 20px rgba(0,255,136,0.5); }
+    .subtitle { color: #61dafb; font-size: 1.2em; margin-top: 10px; }
+    .wallet-section { margin: 20px 0; }
+    .wallet-btn { background: linear-gradient(135deg, #00ff88, #00d4ff); color: #0a1128; border: none; padding: 12px 30px; cursor: pointer; font-size: 16px; font-weight: bold; transition: all 0.3s; box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+    .wallet-btn:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,255,136,0.6); }
+    .wallet-info { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; background: rgba(0,31,84,0.5); border: 2px solid #00ff88; color: #61dafb; }
+    .disconnect-btn { background: #ff0055; color: white; border: none; padding: 5px 15px; cursor: pointer; font-size: 12px; font-weight: bold; transition: all 0.3s; }
+    .disconnect-btn:hover { background: #cc0044; }
+    .user-panel { display: grid; grid-template-columns: 400px 1fr; gap: 20px; }
+    .user-controls { background: linear-gradient(135deg, #0a1128 0%, #001f54 100%); padding: 25px; border: 2px solid #00ff88; box-shadow: 0 0 30px rgba(0,255,136,0.3), 0 8px 32px rgba(0,0,0,0.5); max-height: 80vh; overflow-y: auto; }
+    .option-category { margin-bottom: 25px; }
+    .option-category h3 { margin-bottom: 15px; color: #00ff88; border-bottom: 2px solid #00ff88; padding-bottom: 8px; font-size: 1.2em; text-shadow: 0 0 10px rgba(0,255,136,0.5); }
+    
+    /* Tier section headers */
+    .tier-section { margin-bottom: 20px; }
+    .tier-header { 
+      padding: 8px 12px; 
+      margin-bottom: 10px; 
+      font-size: 13px; 
+      font-weight: bold; 
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .tier-header.basic { 
+      background: rgba(128,128,128,0.2); 
+      border: 1px solid #808080; 
+      color: #d0d0d0;
+    }
+    .tier-header.uncommon { 
+      background: rgba(59,130,246,0.2); 
+      border: 1px solid #3b82f6; 
+      color: #3b82f6;
+    }
+    .tier-header.rare { 
+      background: rgba(168,85,247,0.2); 
+      border: 1px solid #a855f7; 
+      color: #a855f7;
+    }
+    .tier-header.legendary { 
+      background: rgba(251,191,36,0.2); 
+      border: 1px solid #fbbf24; 
+      color: #fbbf24;
+    }
+    
+    .option-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); gap: 10px; }
+    .option-item { border: 3px solid #034078; padding: 8px; text-align: center; cursor: pointer; transition: all 0.3s; background: rgba(0,31,84,0.5); position: relative; }
+    .option-item.tier-basic { border-color: #808080; box-shadow: 0 0 10px rgba(128,128,128,0.3); }
+    .option-item.tier-uncommon { border-color: #3b82f6; box-shadow: 0 0 10px rgba(59,130,246,0.4); }
+    .option-item.tier-rare { border-color: #a855f7; box-shadow: 0 0 10px rgba(168,85,247,0.4); }
+    .option-item.tier-legendary { border-color: #fbbf24; box-shadow: 0 0 15px rgba(251,191,36,0.5); }
+    .option-item.locked { opacity: 0.4; cursor: not-allowed; }
+    .option-item.locked::after { content: '🔒'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 24px; }
+    .option-item:hover { border-color: #00ff88; transform: scale(1.05); box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+    .option-item.locked:hover { transform: none; box-shadow: none; }
+    .option-item.locked.tier-basic:hover { border-color: #808080; }
+    .option-item.locked.tier-uncommon:hover { border-color: #3b82f6; }
+    .option-item.locked.tier-rare:hover { border-color: #a855f7; }
+    .option-item.locked.tier-legendary:hover { border-color: #fbbf24; }
+    .option-item.selected { border-color: #00ff88; background: rgba(0,255,136,0.1); box-shadow: 0 0 30px rgba(0,255,136,0.6); }
+    .option-item img { width: 100%; height: 60px; object-fit: contain; }
+    .preview-area { background: linear-gradient(135deg, #0a1128 0%, #001f54 100%); padding: 25px; border: 2px solid #00ff88; box-shadow: 0 0 30px rgba(0,255,136,0.3), 0 8px 32px rgba(0,0,0,0.5); text-align: center; }
+    .preview-area h3 { margin-bottom: 20px; color: #00ff88; font-size: 1.4em; text-shadow: 0 0 10px rgba(0,255,136,0.5); }
+    .frog-preview { width: 400px; height: 400px; margin: 0 auto; position: relative; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); overflow: hidden; border: 3px solid #00d4ff; box-shadow: 0 0 40px rgba(0,212,255,0.4); }
+    .frog-part { position: absolute; pointer-events: none; }
+    button { padding: 12px 24px; background: linear-gradient(135deg, #00ff88, #00d4ff); color: #0a1128; border: none; cursor: pointer; font-weight: bold; margin: 10px 5px; transition: all 0.3s; font-size: 14px; box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+    button:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,255,136,0.6), 0 5px 15px rgba(0,212,255,0.4); }
+    .action-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+    .social-links { display: flex; gap: 15px; justify-content: center; margin-top: 30px; padding: 20px; }
+    .social-box { display: flex; align-items: center; justify-content: center; padding: 15px 25px; background: linear-gradient(135deg, #0a1128 0%, #001f54 100%); border: 2px solid #00ff88; cursor: pointer; transition: all 0.3s; text-decoration: none; color: #00ff88; font-weight: bold; font-size: 16px; box-shadow: 0 0 20px rgba(0,255,136,0.3); }
+    .social-box:hover { transform: translateY(-3px); box-shadow: 0 0 30px rgba(0,255,136,0.6); border-color: #00d4ff; }
+    .social-box svg { margin-right: 10px; }
+    @media (max-width: 900px) {
+      .user-panel { grid-template-columns: 1fr; }
+      .frog-preview { width: 100%; max-width: 400px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>MAKE YOUR PEPE</h1>
+      <p class="subtitle">SPEND $MYP TO UNLOCK NEW ITEMS</p>
+      
+      <div class="wallet-section">
+        <button class="wallet-btn" id="connect-wallet-btn">Connect Wallet</button>
+        <div class="wallet-info" id="wallet-info" style="display:none;">
+          <span id="wallet-address"></span>
+          <span id="token-balance" style="margin-left:15px; color:#00ff88;">0 $MYP</span>
+          <button class="disconnect-btn" id="disconnect-btn">Disconnect</button>
+        </div>
+      </div>
+
+      <div style="margin: 20px 0;">
+        <button class="wallet-btn" id="buy-token-btn" style="background: linear-gradient(135deg, #fbbf24, #f59e0b); display:none;">
+          🚀 BUY $MYP
+        </button>
+      </div>
+    </header>
+
+    <div class="user-panel">
+      <div class="user-controls">
+        <div class="option-category">
+          <h3>🐸 Frog Face</h3>
+          <div id="faces-options"></div>
+        </div>
+        <div class="option-category">
+          <h3>🎩 Hats</h3>
+          <div id="hats-options"></div>
+        </div>
+        <div class="option-category">
+          <h3>👓 Accessories</h3>
+          <div id="accessories-options"></div>
+        </div>
+        <div class="option-category">
+          <h3>🖼️ Backgrounds</h3>
+          <div id="backgrounds-options"></div>
+        </div>
+        <div class="action-buttons">
+          <button id="random-meme">🎲 Random</button>
+          <button id="download-meme">⬇️ Download</button>
+          <button id="share-twitter" style="background: linear-gradient(135deg, #1DA1F2, #0d8bd9);">🐦 Share</button>
+        </div>
+      </div>
+
+      <div class="preview-area">
+        <h3>Your Meme Preview</h3>
+        <div class="frog-preview" id="frog-preview">
+          <img id="current-background" style="position:absolute; top:0; left:0; width:100%; height:100%; object-fit:cover; z-index:0; display:none;">
+          <img id="current-face" class="frog-part" style="display:none; z-index:2;">
+          <img id="current-hat" class="frog-part" style="display:none; z-index:3;">
+          <div id="accessories-container" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:4;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="social-links">
+      <a href="https://x.com/makeyourpepe" target="_blank" class="social-box">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+        </svg>
+        X
+      </a>
+      <a href="https://t.me/+OyCs1LrshIA0NGNk" target="_blank" class="social-box">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/>
+        </svg>
+        Telegram
+      </a>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
+<script>
+// Token Launch Configuration
+const PUMP_FUN_URL = "YOUR_PUMP_FUN_URL_HERE";
+const TOKEN_LAUNCH_READY = false;
+
+// Wallet and Token Configuration
+const MYP_TOKEN_ADDRESS = "YOUR_TOKEN_ADDRESS_HERE";
+const TOKEN_SYSTEM_ACTIVE = false;
+let walletConnected = false;
+let walletAddress = null;
+let tokenBalance = 0;
+
+// Token tier system
+const TOKEN_TIERS = {
+  basic: 0,
+  uncommon: 100,
+  rare: 500,
+  legendary: 1000
+};
+
+// Tier display information
+const TIER_INFO = {
+  basic: { name: '✅ BASIC (FREE)', emoji: '✅', color: '#808080' },
+  uncommon: { name: '🔓 UNCOMMON', emoji: '🔓', tokens: 100, color: '#3b82f6' },
+  rare: { name: '💎 RARE', emoji: '💎', tokens: 500, color: '#a855f7' },
+  legendary: { name: '👑 LEGENDARY', emoji: '👑', tokens: 1000, color: '#fbbf24' }
+};
+
+let itemTiers = {};
+let imageLibrary = { backgrounds: [], faces: [], hats: [], accessories: [] };
+let currentSelections = { background: null, face: null, hat: null, accessories: [] };
+const singularMap = { backgrounds: "background", faces: "face", hats: "hat", accessories: "accessories" };
+const optionGrids = {
+  backgrounds: document.getElementById("backgrounds-options"),
+  faces: document.getElementById("faces-options"),
+  hats: document.getElementById("hats-options"),
+  accessories: document.getElementById("accessories-options"),
+};
+
+// Phantom wallet detection
+function getPhantomWallet() {
+  if ('phantom' in window) {
+    const phantomWindow = window.phantom?.solana;
+    if (phantomWindow?.isPhantom) {
+      return phantomWindow;
+    }
+  }
+  
+  if ('solana' in window) {
+    const solanaWindow = window.solana;
+    if (solanaWindow?.isPhantom) {
+      return solanaWindow;
+    }
+  }
+  
+  return null;
+}
+
+async function waitForPhantom(timeout = 3000) {
+  return new Promise((resolve) => {
+    const startTime = Date.now();
+    
+    const checkWallet = () => {
+      const wallet = getPhantomWallet();
+      if (wallet) {
+        console.log("✅ Phantom wallet detected!");
+        resolve(wallet);
+        return;
+      }
+      
+      if (Date.now() - startTime > timeout) {
+        console.log("❌ Phantom wallet not found after timeout");
+        resolve(null);
+        return;
+      }
+      
+      setTimeout(checkWallet, 100);
+    };
+    
+    checkWallet();
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("🚀 Make Your Pepe - Loading...");
+  
+  if(TOKEN_LAUNCH_READY) {
+    document.getElementById("buy-token-btn").style.display = "inline-block";
+  }
+  
+  loadImageLibrary();
+  setupWalletListeners();
+  updateUserOptions();
+  generateRandomMeme();
+  checkAutoConnect();
+  
+  document.getElementById("random-meme").onclick=generateRandomMeme;
+  document.getElementById("download-meme").onclick=downloadMeme;
+  document.getElementById("share-twitter").onclick=shareToTwitter;
+  document.getElementById("buy-token-btn").onclick=buyToken;
+  
+  console.log("✅ Make Your Pepe - Ready!");
+});
+
+async function setupWalletListeners(){
+  document.getElementById("connect-wallet-btn").onclick=connectWallet;
+  document.getElementById("disconnect-btn").onclick=disconnectWallet;
+}
+
+async function checkAutoConnect(){
+  const savedWallet = localStorage.getItem("walletConnected");
+  if(savedWallet === "true"){
+    setTimeout(async () => {
+      await connectWallet();
+    }, 500);
+  }
+}
+
+async function connectWallet(){
+  try {
+    console.log("🔌 Attempting to connect wallet...");
+    
+    const provider = await waitForPhantom(3000);
+    
+    if(!provider){
+      console.error("❌ Phantom wallet not detected");
+      const userChoice = confirm(
+        "❌ Phantom Wallet not detected!\n\n" +
+        "Please make sure you have Phantom installed.\n\n" +
+        "Click OK to install Phantom, or Cancel to try again."
+      );
+      
+      if(userChoice){
+        window.open("https://phantom.app/", "_blank");
+      }
+      return;
+    }
+    
+    console.log("✅ Phantom found, requesting connection...");
+    
+    const response = await provider.connect();
+    walletAddress = response.publicKey.toString();
+    walletConnected = true;
+    
+    console.log("✅ Connected to wallet:", walletAddress);
+    
+    localStorage.setItem("walletConnected", "true");
+    
+    document.getElementById("connect-wallet-btn").style.display = "none";
+    document.getElementById("wallet-info").style.display = "inline-flex";
+    document.getElementById("wallet-address").textContent = 
+      walletAddress.slice(0,4) + "..." + walletAddress.slice(-4);
+    
+    await updateTokenBalance();
+    
+    alert("✅ Wallet connected successfully!");
+    
+  } catch(error){
+    console.error("❌ Wallet connection error:", error);
+    
+    if(error.message.includes("User rejected")){
+      alert("❌ Connection cancelled. Please approve the connection in Phantom.");
+    } else {
+      alert("❌ Failed to connect wallet: " + error.message + "\n\nPlease refresh the page and try again.");
+    }
+  }
+}
+
+async function disconnectWallet(){
+  try {
+    const provider = getPhantomWallet();
+    if(provider){
+      await provider.disconnect();
+    }
+    
+    walletConnected = false;
+    walletAddress = null;
+    tokenBalance = 0;
+    
+    localStorage.removeItem("walletConnected");
+    
+    document.getElementById("connect-wallet-btn").style.display = "inline-block";
+    document.getElementById("wallet-info").style.display = "none";
+    
+    updateUserOptions();
+    
+    alert("✅ Wallet disconnected");
+    
+  } catch(error){
+    console.error("Disconnect error:", error);
+  }
+}
+
+async function updateTokenBalance(){
+  try {
+    if(MYP_TOKEN_ADDRESS === "YOUR_TOKEN_ADDRESS_HERE"){
+      tokenBalance = 150;
+      console.warn("⚠️ Using simulated balance. Please add your token address!");
+    } else {
+      const connection = new solanaWeb3.Connection(
+        solanaWeb3.clusterApiUrl('mainnet-beta'),
+        'confirmed'
+      );
+      
+      const publicKey = new solanaWeb3.PublicKey(walletAddress);
+      const tokenPublicKey = new solanaWeb3.PublicKey(MYP_TOKEN_ADDRESS);
+      
+      const tokenAccounts = await connection.getParsedTokenAccountsByOwner(
+        publicKey,
+        { mint: tokenPublicKey }
+      );
+      
+      if(tokenAccounts.value.length > 0){
+        const balance = tokenAccounts.value[0].account.data.parsed.info.tokenAmount.uiAmount;
+        tokenBalance = balance || 0;
+        console.log("✅ Token balance loaded:", tokenBalance, "$MYP");
+      } else {
+        tokenBalance = 0;
+        console.log("ℹ️ User has no $MYP tokens");
+      }
+    }
+    
+    document.getElementById("token-balance").textContent = Math.floor(tokenBalance) + " $MYP";
+    updateUserOptions();
+    
+  } catch(error){
+    console.error("❌ Error fetching token balance:", error);
+    tokenBalance = 0;
+    document.getElementById("token-balance").textContent = "0 $MYP";
+    alert("⚠️ Could not load token balance. Please try reconnecting your wallet.");
+  }
+}
+
+function getUserTier(){
+  if(!walletConnected) return 'basic';
+  
+  if(tokenBalance >= TOKEN_TIERS.legendary) return 'legendary';
+  if(tokenBalance >= TOKEN_TIERS.rare) return 'rare';
+  if(tokenBalance >= TOKEN_TIERS.uncommon) return 'uncommon';
+  return 'basic';
+}
+
+function isItemUnlocked(itemId, type){
+  if(!TOKEN_SYSTEM_ACTIVE){
+    return true;
+  }
+  
+  const itemTier = itemTiers[itemId] || 'basic';
+  
+  if(!walletConnected){
+    return itemTier === 'basic';
+  }
+  
+  const userTier = getUserTier();
+  
+  const tierLevels = {
+    basic: 0,
+    uncommon: 1,
+    rare: 2,
+    legendary: 3
+  };
+  
+  return tierLevels[userTier] >= tierLevels[itemTier];
+}
+
+function loadImageLibrary(){
+  try {
+    const s=localStorage.getItem("frogMemeLibrary");
+    if(s){
+      const loaded = JSON.parse(s);
+      imageLibrary = {
+        backgrounds: loaded.backgrounds || [],
+        faces: loaded.faces || [],
+        hats: loaded.hats || [],
+        accessories: loaded.accessories || []
+      };
+    }
+  } catch(e) {
+    console.error("❌ Error loading library:", e);
+    imageLibrary = { backgrounds: [], faces: [], hats: [], accessories: [] };
+  }
+  
+  try {
+    const t=localStorage.getItem("itemTiers");
+    if(t){
+      itemTiers = JSON.parse(t);
+    }
+  } catch(e) {
+    console.error("❌ Error loading tiers:", e);
+    itemTiers = {};
+  }
+}
+
+function updateUserOptions(){
+  Object.keys(optionGrids).forEach(type=>{
+    const container=optionGrids[type];
+    if(!container) return;
+    
+    container.innerHTML="";
+    const singular=singularMap[type];
+    
+    if(!imageLibrary[type] || !Array.isArray(imageLibrary[type])){
+      imageLibrary[type] = [];
+    }
+    
+    const tierOrder = { basic: 0, uncommon: 1, rare: 2, legendary: 3 };
+    const sortedItems = [...imageLibrary[type]].sort((a, b) => {
+      const tierA = itemTiers[a.id] || 'basic';
+      const tierB = itemTiers[b.id] || 'basic';
+      return tierOrder[tierA] - tierOrder[tierB];
+    });
+    
+    const itemsByTier = {
+      basic: [],
+      uncommon: [],
+      rare: [],
+      legendary: []
+    };
+    
+    sortedItems.forEach(img => {
+      const tier = itemTiers[img.id] || 'basic';
+      itemsByTier[tier].push(img);
+    });
+    
+    ['basic', 'uncommon', 'rare', 'legendary'].forEach(tier => {
+      const items = itemsByTier[tier];
+      if(items.length === 0) return;
+      
+      const tierSection = document.createElement('div');
+      tierSection.className = 'tier-section';
+      
+      const tierHeader = document.createElement('div');
+      tierHeader.className = `tier-header ${tier}`;
+      
+      const tierInfo = TIER_INFO[tier];
+      const tierText = tier === 'basic' 
+        ? `${tierInfo.emoji} BASIC (FREE)` 
+        : `${tierInfo.emoji} ${tier.toUpperCase()} (${tierInfo.tokens}+ $MYP)`;
+      
+      tierHeader.innerHTML = `
+        <span>${tierText}</span>
+        <span>${items.length} item${items.length !== 1 ? 's' : ''}</span>
+      `;
+      
+      tierSection.appendChild(tierHeader);
+      
+      const grid = document.createElement('div');
+      grid.className = 'option-grid';
+      
+      if(tier === 'basic') {
+        const none=document.createElement("div");
+        none.className=`option-item tier-basic ${(type==='accessories'?currentSelections[singular].length===0:currentSelections[singular]===null)?'selected':''}`;
+        none.innerHTML="<div style='padding:20px;font-weight:bold;'>None</div>";
+        none.onclick=()=>selectOption(singular,null);
+        grid.appendChild(none);
+      }
+      
+      items.forEach(img=>{
+        const div=document.createElement("div");
+        const isSelected = type==='accessories' ? currentSelections[singular].includes(img.id) : currentSelections[singular]===img.id;
+        const unlocked = isItemUnlocked(img.id, type);
+        
+        div.className=`option-item tier-${tier} ${isSelected?'selected':''} ${!unlocked?'locked':''}`;
+        div.innerHTML=`<img src="${img.data}">`;
+        
+        if(unlocked){
+          div.onclick=()=>selectOption(singular,img.id);
+        } else {
+          div.onclick=()=>{
+            const needed = TOKEN_TIERS[tier];
+            const have = Math.floor(tokenBalance);
+            const needMore = needed - have;
+            
+            let message = `🔒 This item is LOCKED!\n\n`;
+            message += `Tier: ${tier.toUpperCase()}\n`;
+            message += `Required: ${needed} $MYP\n`;
+            message += `You have: ${have} $MYP\n`;
+            message += `You need: ${needMore} more $MYP\n\n`;
+            
+            if(TOKEN_LAUNCH_READY && PUMP_FUN_URL !== "YOUR_PUMP_FUN_URL_HERE"){
+              message += `Click OK to buy $MYP now!`;
+              if(confirm(message)){
+                window.open(PUMP_FUN_URL, '_blank');
+              }
+            } else {
+              message += `Token launching soon!`;
+              alert(message);
+            }
+          };
+        }
+        
+        grid.appendChild(div);
+      });
+      
+      tierSection.appendChild(grid);
+      container.appendChild(tierSection);
+    });
+  });
+}
+
+function selectOption(type,id){
+  if(!(type in currentSelections))return;
+  
+  if(type==='accessories'){
+    if(id===null){
+      currentSelections[type]=[];
+    } else {
+      const index=currentSelections[type].indexOf(id);
+      if(index>-1){
+        currentSelections[type].splice(index,1);
+      } else {
+        currentSelections[type].push(id);
+      }
+    }
+  } else {
+    currentSelections[type]=id;
+  }
+  
+  updateUserOptions();
+  updatePreview();
+}
+
+function updatePreview(){
+  const singleLayers=["background","face","hat"];
+  singleLayers.forEach(layer=>{
+    const el=document.getElementById("current-"+layer);
+    const id=currentSelections[layer];
+    if(!id){
+      el.style.display="none";
+      return;
+    }
+    const type=Object.keys(singularMap).find(k=>singularMap[k]===layer);
+    const item=imageLibrary[type].find(i=>i.id===id);
+    if(!item)return;
+    
+    el.src=item.data;
+    
+    if(layer==="background"){
+      el.style.position="absolute";
+      el.style.top="0";
+      el.style.left="0";
+      el.style.width="100%";
+      el.style.height="100%";
+      el.style.objectFit="cover";
+      el.style.zIndex="0";
+    } else {
+      const p=item.position;
+      el.style.left=p.x+"px";
+      el.style.top=p.y+"px";
+      el.style.width=p.width+"px";
+      el.style.height=p.height+"px";
+    }
+    el.style.display="block";
+  });
+  
+  const accContainer=document.getElementById("accessories-container");
+  accContainer.innerHTML="";
+  currentSelections.accessories.forEach(accId=>{
+    const item=imageLibrary.accessories.find(i=>i.id===accId);
+    if(!item)return;
+    const img=document.createElement("img");
+    img.src=item.data;
+    img.className="frog-part";
+    const p=item.position;
+    img.style.position="absolute";
+    img.style.left=p.x+"px";
+    img.style.top=p.y+"px";
+    img.style.width=p.width+"px";
+    img.style.height=p.height+"px";
+    accContainer.appendChild(img);
+  });
+}
+
+function generateRandomMeme(){
+  ["faces","hats","backgrounds"].forEach(t=>{
+    const items=imageLibrary[t];
+    const singular=singularMap[t];
+    currentSelections[singular]=items.length?items[Math.floor(Math.random()*items.length)].id:null;
+  });
+  
+  const accItems=imageLibrary.accessories;
+  if(accItems.length>0){
+    const numAcc=Math.floor(Math.random()*3);
+    currentSelections.accessories=[];
+    for(let i=0;i<numAcc;i++){
+      const randAcc=accItems[Math.floor(Math.random()*accItems.length)];
+      if(!currentSelections.accessories.includes(randAcc.id)){
+        currentSelections.accessories.push(randAcc.id);
+      }
+    }
+  } else {
+    currentSelections.accessories=[];
+  }
+  
+  updateUserOptions();
+  updatePreview();
+}
+
+function downloadMeme(){
+  html2canvas(document.getElementById("frog-preview")).then(canvas=>{
+    const link=document.createElement("a");
+    link.download="my-pepe-"+Date.now()+".png";
+    link.href=canvas.toDataURL();
+    link.click();
+  });
+}
+
+function shareToTwitter(){
+  html2canvas(document.getElementById("frog-preview")).then(canvas=>{
+    const text = "I just made this Pepe on Make Your Pepe! 🐸\n\nCreate yours: [YOUR_WEBSITE_URL]\nGet $MYP: " + (PUMP_FUN_URL !== "YOUR_PUMP_FUN_URL_HERE" ? PUMP_FUN_URL : "[COMING SOON]");
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    
+    window.open(twitterUrl, '_blank');
+    
+    const link=document.createElement("a");
+    link.download="my-pepe-"+Date.now()+".png";
+    link.href=canvas.toDataURL();
+    link.click();
+    
+    alert("📸 Image downloaded! Now attach it to your tweet.");
+  });
+}
+
+function buyToken(){
+  if(PUMP_FUN_URL === "YOUR_PUMP_FUN_URL_HERE" || !TOKEN_LAUNCH_READY){
+    alert("🚀 Token launching soon! Follow us on X and Telegram for updates.");
+    return;
+  }
+  window.open(PUMP_FUN_URL, '_blank');
+}
+</script>
+</body>
+</html>

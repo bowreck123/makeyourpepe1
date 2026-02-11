@@ -30,11 +30,15 @@
     h1 { color: #00ff88; margin-bottom: 10px; font-size: 2.5em; text-shadow: 0 0 20px rgba(0,255,136,0.5); }
     .subtitle { color: #61dafb; font-size: 1.2em; margin-top: 10px; }
     .wallet-section { margin: 20px 0; }
-    .wallet-btn { background: linear-gradient(135deg, #00ff88, #00d4ff); color: #0a1128; border: none; padding: 12px 30px; cursor: pointer; font-size: 16px; font-weight: bold; transition: all 0.3s; box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+    .wallet-btn { background: linear-gradient(135deg, #00ff88, #00d4ff); color: #0a1128; border: none; padding: 12px 30px; cursor: pointer; font-size: 16px; font-weight: bold; transition: all 0.3s; box-shadow: 0 0 20px rgba(0,255,136,0.4); border-radius: 8px; }
     .wallet-btn:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,255,136,0.6); }
-    .wallet-info { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; background: rgba(0,31,84,0.5); border: 2px solid #00ff88; color: #61dafb; }
-    .disconnect-btn { background: #ff0055; color: white; border: none; padding: 5px 15px; cursor: pointer; font-size: 12px; font-weight: bold; transition: all 0.3s; }
+    .wallet-info { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px; background: rgba(0,31,84,0.5); border: 2px solid #00ff88; color: #61dafb; border-radius: 8px; }
+    .disconnect-btn { background: #ff0055; color: white; border: none; padding: 5px 15px; cursor: pointer; font-size: 12px; font-weight: bold; transition: all 0.3s; border-radius: 4px; }
     .disconnect-btn:hover { background: #cc0044; }
+    .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,17,40,0.95); display: flex; align-items: center; justify-content: center; z-index: 9999; }
+    .loading-content { text-align: center; }
+    .loading-spinner { border: 4px solid rgba(0,255,136,0.2); border-top: 4px solid #00ff88; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     .user-panel { display: grid; grid-template-columns: 400px 1fr; gap: 20px; }
     .user-controls { background: linear-gradient(135deg, #0a1128 0%, #001f54 100%); padding: 25px; border: 2px solid #00ff88; box-shadow: 0 0 30px rgba(0,255,136,0.3), 0 8px 32px rgba(0,0,0,0.5); max-height: 80vh; overflow-y: auto; }
     .option-category { margin-bottom: 25px; }
@@ -93,7 +97,7 @@
     .preview-area h3 { margin-bottom: 20px; color: #00ff88; font-size: 1.4em; text-shadow: 0 0 10px rgba(0,255,136,0.5); }
     .frog-preview { width: 400px; height: 400px; margin: 0 auto; position: relative; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); overflow: hidden; border: 3px solid #00d4ff; box-shadow: 0 0 40px rgba(0,212,255,0.4); }
     .frog-part { position: absolute; pointer-events: none; }
-    button { padding: 12px 24px; background: linear-gradient(135deg, #00ff88, #00d4ff); color: #0a1128; border: none; cursor: pointer; font-weight: bold; margin: 10px 5px; transition: all 0.3s; font-size: 14px; box-shadow: 0 0 20px rgba(0,255,136,0.4); }
+    button { padding: 12px 24px; background: linear-gradient(135deg, #00ff88, #00d4ff); color: #0a1128; border: none; cursor: pointer; font-weight: bold; margin: 10px 5px; transition: all 0.3s; font-size: 14px; box-shadow: 0 0 20px rgba(0,255,136,0.4); border-radius: 8px; }
     button:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,255,136,0.6), 0 5px 15px rgba(0,212,255,0.4); }
     .action-buttons { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
     .social-links { display: flex; gap: 15px; justify-content: center; margin-top: 30px; padding: 20px; }
@@ -107,6 +111,15 @@
   </style>
 </head>
 <body>
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loading-overlay">
+    <div class="loading-content">
+      <div class="loading-spinner"></div>
+      <h2 style="color: #00ff88;">Loading Make Your Pepe...</h2>
+      <p style="color: #61dafb; margin-top: 10px;" id="loading-text">Fetching images...</p>
+    </div>
+  </div>
+
   <div class="container">
     <header>
       <h1>MAKE YOUR PEPE</h1>
@@ -183,18 +196,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://unpkg.com/@solana/web3.js@latest/lib/index.iife.min.js"></script>
 <script>
-// Token Launch Configuration
+// Configuration
 const PUMP_FUN_URL = "YOUR_PUMP_FUN_URL_HERE";
 const TOKEN_LAUNCH_READY = false;
-
-// Wallet and Token Configuration
 const MYP_TOKEN_ADDRESS = "YOUR_TOKEN_ADDRESS_HERE";
 const TOKEN_SYSTEM_ACTIVE = false;
+
 let walletConnected = false;
 let walletAddress = null;
 let tokenBalance = 0;
 
-// Token tier system
 const TOKEN_TIERS = {
   basic: 0,
   uncommon: 100,
@@ -202,7 +213,6 @@ const TOKEN_TIERS = {
   legendary: 1000
 };
 
-// Tier display information
 const TIER_INFO = {
   basic: { name: '✅ BASIC (FREE)', emoji: '✅', color: '#808080' },
   uncommon: { name: '🔓 UNCOMMON', emoji: '🔓', tokens: 100, color: '#3b82f6' },
@@ -220,6 +230,62 @@ const optionGrids = {
   hats: document.getElementById("hats-options"),
   accessories: document.getElementById("accessories-options"),
 };
+
+// Load data from data.json
+async function loadDataFromServer() {
+  try {
+    updateLoadingText("Fetching image data...");
+    
+    const response = await fetch('data.json');
+    
+    if (!response.ok) {
+      throw new Error('data.json not found');
+    }
+    
+    const data = await response.json();
+    
+    updateLoadingText("Loading images...");
+    
+    if (data.imageLibrary) {
+      imageLibrary = {
+        backgrounds: data.imageLibrary.backgrounds || [],
+        faces: data.imageLibrary.faces || [],
+        hats: data.imageLibrary.hats || [],
+        accessories: data.imageLibrary.accessories || []
+      };
+    }
+    
+    if (data.itemTiers) {
+      itemTiers = data.itemTiers;
+    }
+    
+    const totalItems = imageLibrary.faces.length + imageLibrary.hats.length + 
+                       imageLibrary.accessories.length + imageLibrary.backgrounds.length;
+    
+    console.log(`✅ Loaded ${totalItems} items from data.json`);
+    
+    return true;
+    
+  } catch (error) {
+    console.error('❌ Error loading data.json:', error);
+    alert('⚠️ Could not load image data.\n\nPlease make sure data.json file exists on your server.');
+    return false;
+  }
+}
+
+function updateLoadingText(text) {
+  const loadingText = document.getElementById('loading-text');
+  if (loadingText) {
+    loadingText.textContent = text;
+  }
+}
+
+function hideLoading() {
+  const overlay = document.getElementById('loading-overlay');
+  if (overlay) {
+    overlay.style.display = 'none';
+  }
+}
 
 // Phantom wallet detection
 function getPhantomWallet() {
@@ -265,14 +331,15 @@ async function waitForPhantom(timeout = 3000) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   console.log("🚀 Make Your Pepe - Loading...");
+  
+  await loadDataFromServer();
   
   if(TOKEN_LAUNCH_READY) {
     document.getElementById("buy-token-btn").style.display = "inline-block";
   }
   
-  loadImageLibrary();
   setupWalletListeners();
   updateUserOptions();
   generateRandomMeme();
@@ -282,6 +349,8 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("download-meme").onclick=downloadMeme;
   document.getElementById("share-twitter").onclick=shareToTwitter;
   document.getElementById("buy-token-btn").onclick=buyToken;
+  
+  hideLoading();
   
   console.log("✅ Make Your Pepe - Ready!");
 });
@@ -445,34 +514,6 @@ function isItemUnlocked(itemId, type){
   };
   
   return tierLevels[userTier] >= tierLevels[itemTier];
-}
-
-function loadImageLibrary(){
-  try {
-    const s=localStorage.getItem("frogMemeLibrary");
-    if(s){
-      const loaded = JSON.parse(s);
-      imageLibrary = {
-        backgrounds: loaded.backgrounds || [],
-        faces: loaded.faces || [],
-        hats: loaded.hats || [],
-        accessories: loaded.accessories || []
-      };
-    }
-  } catch(e) {
-    console.error("❌ Error loading library:", e);
-    imageLibrary = { backgrounds: [], faces: [], hats: [], accessories: [] };
-  }
-  
-  try {
-    const t=localStorage.getItem("itemTiers");
-    if(t){
-      itemTiers = JSON.parse(t);
-    }
-  } catch(e) {
-    console.error("❌ Error loading tiers:", e);
-    itemTiers = {};
-  }
 }
 
 function updateUserOptions(){

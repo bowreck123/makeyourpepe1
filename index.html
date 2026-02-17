@@ -732,7 +732,7 @@ function downloadMeme(){
 
 function shareToTwitter(){
   html2canvas(document.getElementById("frog-preview")).then(canvas=>{
-    const text = "I just made this Pepe on Make Your Pepe! 🐸\n\nCreate yours: [YOUR_WEBSITE_URL]\nGet $MYP: " + (PUMP_FUN_URL !== "YOUR_PUMP_FUN_URL_HERE" ? PUMP_FUN_URL : "[COMING SOON]");
+    const text = "I just made this Pepe on Make Your Pepe! 🐸\n\nCreate yours: https://makeyourpepe.vercel.app/\nGet $MYP: " + (PUMP_FUN_URL !== "YOUR_PUMP_FUN_URL_HERE" ? PUMP_FUN_URL : "[COMING SOON]");
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     
     window.open(twitterUrl, '_blank');
@@ -755,4 +755,5 @@ function buyToken(){
 }
 </script>
 </body>
+
 </html>
